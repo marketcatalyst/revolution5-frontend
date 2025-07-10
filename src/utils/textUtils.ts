@@ -1,11 +1,9 @@
-// src/utils/textUtils.ts
-
 export function stripCitations(text: string) {
   if (!text) return '';
   return text.replace(/\[.*?\]/g, '');
 }
 
-// NEW: This function truncates text to a certain length without cutting off words.
+// This function truncates text to a certain length without cutting off words.
 export function smartTruncate(text: string, maxLength: number) {
   if (!text || text.length <= maxLength) return text;
 

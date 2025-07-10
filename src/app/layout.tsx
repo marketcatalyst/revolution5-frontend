@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from 'next/link';
+import Image from 'next/image';
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -20,14 +21,19 @@ export default function RootLayout({
       <body className={`${inter.className} flex flex-col min-h-screen`}>
         
         <header className="bg-white shadow-md">
-          {/* === UPDATED NAVIGATION SECTION === */}
           <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
             <div className="flex lg:flex-1">
-              <Link href="/" className="-m-1.5 p-1.5 text-xl font-bold font-serif text-[#36454F] hover:text-green-700">
-                Revolution 5
+              <Link href="/" className="-m-1.5 p-1.5">
+                <span className="sr-only">Revolution 5</span>
+                <Image
+                  src="/logo-r5.png"
+                  alt="Revolution 5 Logo"
+                  width={150}
+                  height={40}
+                  priority
+                />
               </Link>
             </div>
-            
             <div className="flex gap-x-8">
               <Link href="/" className="text-sm font-semibold leading-6 text-gray-900 hover:text-green-700">
                 Home

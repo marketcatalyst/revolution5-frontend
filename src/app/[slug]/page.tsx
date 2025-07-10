@@ -1,16 +1,18 @@
 import Link from 'next/link';
 import { stripCitations } from '@/utils/textUtils';
 
-// This function fetches a specific Venture Page based on its unique slug.
+// This function now robustly handles the Strapi API response for collections.
 async function getPageDataBySlug(slug: string) {
   try {
     const response = await fetch(`http://localhost:1337/api/venture-pages?filters[slug][$eq]=${slug}`);
     if (!response.ok) {
       throw new Error('Failed to fetch page data.');
     }
-    const data = await response.json();
-    if (data.data && data.data.length > 0) {
-      return data.data[0]; 
+    const json = await response.json();
+    
+    if (json.data && json.data.length > 0) {
+      // This handles both `data[0].attributes` and `data[0]` structures.
+      return json.data[0].attributes || json.data[0]; 
     } else {
       return null;
     }
@@ -21,11 +23,10 @@ async function getPageDataBySlug(slug: string) {
 }
 
 export default async function VenturePage({ params }: { params: { slug: string } }) {
-
   const pageData = await getPageDataBySlug(params.slug);
 
   if (!pageData) {
-    return <main><p>Could not load page content for this venture.</p></main>;
+    return <main className="p-8"><p>Could not load page content for this venture.</p></main>;
   }
 
   const { 
@@ -83,7 +84,6 @@ export default async function VenturePage({ params }: { params: { slug: string }
           </div>
         ))}
 
-        {/* === UPDATED BUTTON LINK === */}
         <div className="mt-10">
           <Link
             href="/connect"
