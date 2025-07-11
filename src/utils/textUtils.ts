@@ -1,3 +1,5 @@
+// src/utils/textUtils.ts
+
 export function stripCitations(text: string) {
   if (!text) return '';
   return text.replace(/\[.*?\]/g, '');

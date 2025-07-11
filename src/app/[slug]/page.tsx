@@ -11,8 +11,8 @@ async function getPageDataBySlug(slug: string) {
     const json = await response.json();
     
     if (json.data && json.data.length > 0) {
-      // This handles both `data[0].attributes` and `data[0]` structures.
-      return json.data[0].attributes || json.data[0]; 
+      // The data we need is directly in the first item of the `data` array.
+      return json.data[0]; 
     } else {
       return null;
     }

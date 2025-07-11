@@ -1,58 +1,59 @@
+"use client"; // This directive marks the component as a Client Component.
+
 import Link from 'next/link';
 import { stripCitations } from '@/utils/textUtils';
 
-// This function fetches our data from the Strapi backend.
-async function getHomepageData() {
-  try {
-    const response = await fetch('http://localhost:1337/api/homepage');
-    if (!response.ok) {
-      throw new Error('Failed to fetch homepage data.');
-    }
-    const data = await response.json();
-    return data.data;
-  } catch (error) {
-    console.error("Error fetching homepage data:", error);
-    return null;
-  }
-}
+// Since this is now a Client Component, we'll define the content directly
+// for simplicity, as server-side data fetching works differently here.
+const homepage = {
+    MainHeadline: "Do you remember when learning was a joy?",
+    SupportingNarrative: "Before the conveyor belt of formal education, we all lived in a world of inquiry and discovery. Market Catalyst warmly welcomes you to 'The Fifth Revolution of the Heart and Mind'—a return to that original way of learning, repurposed for the new Industry 5.0 knowledge age. It is a place of profound psychological safety, where creativity and empathy are honored, and where peer-to-peer collaboration is the engine of innovation. It is here that we help you shed the 'systemic verdicts' of the past, so you can lead your team with a new hope, a new way of being, and a new future.",
+    CallToActionText: "Begin Your Quest"
+};
 
-// This is our main Homepage component.
-export default async function Home() {
-  
-  const homepage = await getHomepageData();
-
-  if (!homepage) {
-    return <main className="flex items-center justify-center min-h-screen"><p>Could not load page content. Is the Strapi server running?</p></main>;
-  }
-
-  const { MainHeadline, SupportingNarrative, CallToActionText } = homepage;
-
+export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-[#F5F5DC]">
-      <div className="text-center px-6 py-24 sm:py-32 lg:px-8">
-        
-        {/* UPDATED HEADLINE: Added max-w-3xl and mx-auto to control width and ensure centering. */}
-        <h1 className="font-serif text-4xl font-bold tracking-tight text-[#36454F] sm:text-6xl max-w-3xl mx-auto">
-          {stripCitations(MainHeadline)}
+    // The main container is now the hero section itself.
+    <main className="relative flex h-[calc(100vh-80px)] flex-col items-center justify-center text-white">
+      
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: "url('https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=2070&auto=format&fit=crop')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+      
+      {/* Dark Overlay for Readability */}
+      <div className="absolute inset-0 z-10 bg-black opacity-50" />
+
+      {/* Content Container */}
+      <div className="relative z-20 text-center px-6 py-24 sm:py-32 lg:px-8">
+        <h1 className="font-serif text-4xl font-bold tracking-tight sm:text-6xl text-shadow">
+          {stripCitations(homepage.MainHeadline)}
         </h1>
         
-        <p className="mt-6 text-lg leading-8 text-gray-600 max-w-2xl mx-auto">
-          {Array.isArray(SupportingNarrative) && stripCitations(
-            SupportingNarrative.map((block: any) => 
-              block.children.map((child: any) => child.text).join('')
-            ).join('\n')
-          )}
+        <p className="mt-6 text-lg leading-8 max-w-2xl mx-auto text-shadow">
+          {stripCitations(homepage.SupportingNarrative)}
         </p>
         
         <div className="mt-10">
-          <a
+          <Link
             href="/quest"
-            className="rounded-md bg-green-700 px-4 py-3 text-base font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700"
+            className="rounded-md bg-green-700 px-5 py-3 text-base font-semibold text-white shadow-lg hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700"
           >
-            {stripCitations(CallToActionText)}
-          </a>
+            {stripCitations(homepage.CallToActionText)}
+          </Link>
         </div>
       </div>
+      {/* Simple CSS for text shadow to improve readability against the image */}
+      <style jsx>{`
+        .text-shadow {
+          text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+      `}</style>
     </main>
   );
 }
